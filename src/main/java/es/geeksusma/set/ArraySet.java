@@ -1,72 +1,55 @@
 package es.geeksusma.set;
 
-import java.util.Arrays;
-
 public class ArraySet {
-
-  private static final int ARRAY_BLOCKS = 10;
-  private int[] elements;
-
-  private int size;
-
-  public ArraySet() {
-    elements = new int[ARRAY_BLOCKS];
-    size = 0;
-  }
+  private Integer[] array = new Integer[0];
 
   public Boolean isEmpty() {
-    return size == 0;
+    return this.size() == 0;
+  }
+  public Integer size() {
+    return this.array.length;
   }
 
-  public int size() {
-    return size;
-  }
-
-  public void add(int element) {
-    increaseElements();
-    if (exists(element)) {
-      return;
-    }
-    appendElement(element);
-  }
-
-  private void appendElement(int element) {
-    this.elements[size] = element;
-    size++;
-  }
-
-
-  private void increaseElements() {
-    if (this.elements.length == size) {
-      this.elements = Arrays.copyOf(this.elements, this.elements.length + ARRAY_BLOCKS);
-    }
-  }
-
-  public boolean contains(final int element) {
-    return exists(element);
-  }
-
-  public boolean remove(int element) {
-    final int index = getIndex(element);
-    if (index > -1) {
-      System.arraycopy(this.elements, index + 1, this.elements, index,
-          this.elements.length - 1 - index);
-      return true;
+  public Boolean contains(Integer item) {
+    // TODO: Niveles de indentación
+    for (int i = 0; i < array.length; i++) {
+      if (array[i] == item) {
+        return true;
+      }
     }
     return false;
   }
 
-  private boolean exists(int element) {
-    return getIndex(element) >= 0;
+  public void add(Integer item) {
+    if (this.contains(item)) {
+      return;
+    }
+    // Nuevo array con capacidad para el nuevo elemento
+    Integer[] newArray = new Integer[this.array.length + 1];
+    // Copio los elementos preexistentes
+    for (int i = 0; i < array.length; i++) {
+      newArray[i] = array[i];
+    }
+    // Asigno el nuevo
+    newArray[array.length] = item;
+
+    this.array = newArray;
   }
 
-  private int getIndex(int element) {
-    for (int index = 0; index < size; index++) {
-      final int existingElement = this.elements[index];
-      if (element == existingElement) {
-        return index;
+  public  Boolean remove(Integer item) {
+    if (!this.contains(item)) {
+      return false;
+    }
+    Integer[] newArray = new Integer[this.array.length - 1];
+    // TODO: Niveles de indentación
+    for (int i = 0; i < array.length; i++) {
+      for (int j = 0; j < newArray.length; j++) {
+        if (array[i] != item) {
+          newArray[j] = array[i];
+        }
       }
     }
-    return -1;
+    this.array = newArray;
+    return true;
   }
 }
